@@ -13,4 +13,13 @@ public class SignupDto {
     private String username;
     private String email;
     private String password;
+
+    @Override
+    public String toString() {
+        return "SignupDto{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password=" + "HIDDEN" +
+                '}';
+    }
 }

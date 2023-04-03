@@ -8,7 +8,6 @@ import com.mfdev.redditcloneapp.repository.UserRepository;
 import com.mfdev.redditcloneapp.repository.VerificationTokenRepository;
 import com.mfdev.redditcloneapp.util.Util;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
@@ -34,13 +33,8 @@ public class AuthService {
         VerificationToken token;
 
         try {
-            if (EmailValidator.getInstance().isValid(dto.getEmail())) {
-                dto.setPassword(encoder.encode(dto.getPassword()));
-                token = verificationTokenRepository.save(new VerificationToken(userRepository.save(userMapper.signupDtoToUser(dto))));
-                mailSenderService.sendVerificationMail(dto, token.getToken());
-            } else {
-                return ResponseEntity.badRequest().body("Incorrect mail");
-            }
+            token = verificationTokenRepository.save(new VerificationToken(userRepository.save(userMapper.signupDtoToUser(dto))));
+            mailSenderService.sendVerificationMail(dto, token.getToken());
         } catch (DataIntegrityViolationException e) {
             return util.onUniqueKeyException(e);
         } catch (MailException e) {
