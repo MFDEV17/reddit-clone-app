@@ -9,3 +9,6 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+jwt:
+  private.key: classpath:private.key
+  public.key: classpath:public.key
