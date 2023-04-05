@@ -1,4 +1,4 @@
-package com.mfdev.redditcloneapp.service;
+package com.mfdev.redditcloneapp.service.user;
 
 import com.mfdev.redditcloneapp.dto.user.SignupDto;
 import com.mfdev.redditcloneapp.entity.VerificationToken;
@@ -6,13 +6,15 @@ import com.mfdev.redditcloneapp.entity.user.User;
 import com.mfdev.redditcloneapp.mapper.user.UserMapper;
 import com.mfdev.redditcloneapp.repository.UserRepository;
 import com.mfdev.redditcloneapp.repository.VerificationTokenRepository;
+import com.mfdev.redditcloneapp.service.MailSenderService;
+import com.mfdev.redditcloneapp.service.jwt.JwtService;
 import com.mfdev.redditcloneapp.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -21,7 +23,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final PasswordEncoder encoder;
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final Util util;
