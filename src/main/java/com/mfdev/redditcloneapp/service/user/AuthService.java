@@ -27,6 +27,7 @@ public class AuthService {
     private final Util util;
     private final MailSenderService mailSenderService;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final JwtService jwtService;
 
     @PreAuthorize("permitAll()")
     public ResponseEntity<String> signup(SignupDto dto) {
@@ -44,6 +45,12 @@ public class AuthService {
         return ResponseEntity.ok(util.generateSuccessfulMessage(dto));
     }
 
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<String> signin(Authentication auth) {
+        return ResponseEntity.ok(jwtService.generateToken(auth));
+    }
+
+    @PreAuthorize("permitAll()")
     public String verifyAccount(UUID uuid) {
         VerificationToken token = verificationTokenRepository
                 .findVerificationTokenByToken(uuid).orElseThrow();

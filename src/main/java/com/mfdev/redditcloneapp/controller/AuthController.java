@@ -15,10 +15,16 @@ import java.util.UUID;
 @EnableAsync
 public class AuthController {
     private final AuthService authService;
+    private final AccountService accountService;
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignupDto dto) {
         return authService.signup(dto);
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<String> signIn(Authentication auth) {
+        return authService.signin(auth);
     }
 
     @GetMapping("/verification/{uuid}")
