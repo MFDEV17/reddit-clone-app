@@ -1,5 +1,6 @@
 package com.mfdev.redditcloneapp.entity;
 
+import com.mfdev.redditcloneapp.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -42,4 +43,6 @@ public class Post {
     @OneToMany
     private List<Comment> comments;
 
+    @ManyToOne
+    private User user;
 }
