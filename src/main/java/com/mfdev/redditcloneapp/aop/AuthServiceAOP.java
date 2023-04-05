@@ -21,22 +21,25 @@ public class AuthServiceAOP {
     private final PasswordEncoder encoder;
     private final VerificationTokenRepository verificationTokenRepository;
 
-    @Before("execution(* com.mfdev.redditcloneapp.service.AuthService.signup(..))")
-    public void signup(JoinPoint jp) {
-        SignupDto signupDto = (SignupDto) jp.getArgs()[0];
-
-        log.info("Creating new user: {}", signupDto);
-        log.info("Encoding user password...");
-
-        signupDto.setPassword(encoder.encode(signupDto.getPassword()));
-
-        log.info("The password has been encoded");
-    }
-
-    @After("execution(* com.mfdev.redditcloneapp.service.AuthService.verifyAccount(..))")
+    @After("execution(* com.mfdev.redditcloneapp.service.user.AuthService.verifyAccount(..))")
     public void deleteToken(JoinPoint jp) {
         log.info("Deleting verification token...");
+
         verificationTokenRepository.deleteByToken((UUID) jp.getArgs()[0]);
+
         log.info("Token has been deleted");
+    }
+
+    @Before("execution(* com.mfdev.redditcloneapp.service.user.AuthService.signup(..))")
+    public void updatePassword(JoinPoint jp) {
+        Object arg = jp.getArgs()[0];
+
+        log.info("Encoding password...");
+
+        if (arg instanceof SignupDto dto) {
+            dto.setPassword(encoder.encode(dto.getPassword()));
+        }
+
+        log.info("Password has been encoded");
     }
 }
